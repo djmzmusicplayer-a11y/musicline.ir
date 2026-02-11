@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Line | اشتراک موزیک</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vazirmatn@33.003/font.css">
+    <style>
+        :root {
+            --bg: #ffffff;
+            --card: #171821;
+            --primary: #8b5cf6;
+            --secondary: #22d3ee;
+            --text: #e5e7eb;
+            --muted: #9ca3af;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* پس‌زمینه متحرک */
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            color: var(--text);
+            min-height: 100vh;
+            line-height: 1.6;
+            background: linear-gradient(-45deg, #000000, #1a1a2e, #16213e, #0f3460);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            overflow-x: hidden;
+        }
+
+        /* انیمیشن پس‌زمینه */
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* ذرات متحرک */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            animation: float 20s infinite linear;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) translateX(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) translateX(100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* Header */
+        header {
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(139, 92, 246, 0.2);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 800;
+            font-size: 22px;
+            color: var(--primary);
+        }
+
+        .logo img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--primary);
+            box-shadow: 0 0 15px rgba(139, 92, 246, 0.5);
+        }
+
+        nav a {
+            margin: 0 12px;
+            font-weight: 500;
+            color: var(--muted);
+            transition: all 0.3s;
+            font-size: 15px;
+            padding: 8px 16px;
+            border-radius: 8px;
+        }
+
+        nav a:hover {
+            color: var(--primary);
+            background: rgba(139, 92, 246, 0.1);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 120px 20px;
+            text-align: center;
+            position: relative;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #8f00ff, #00d5ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            color: var(--text);
+            max-width: 600px;
+            margin: 0 auto 35px;
+            font-size: 1.2rem;
+            opacity: 0.9;
+            line-height: 1.8;
+        }
+
+        .hero button {
+            padding: 16px 32px;
+            border: none;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #2600ff, #006cff, #00d5ff);
+            font-weight: 700;
+            cursor: pointer;
+            color: white;
+            font-size: 17px;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(139, 92, 246, 0.4);
+        }
+
+        /* Sections */
+        section {
+            padding: 80px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: 40px;
+            color: var(--text);
+            text-align: center;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(to right, #7a00ff, #1100ff, #00c0ff);
+            margin: 15px auto;
+            border-radius: 2px;
+        }
+
+        /* Music Grid */
+        .music-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .music-card {
+            background: rgba(23, 24, 33, 0.8);
+            border-radius: 20px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            display: flex;
+            flex-direction: column;
+            backdrop-filter: blur(10px);
+        }
+
+        .music-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 35px rgba(139, 92, 246, 0.3);
+            border-color: var(--primary);
+        }
+
+        .music-cover {
+            width: 100%;
+            aspect-ratio: 1/1;
+            border-radius: 16px;
+            overflow: hidden;
+            margin-bottom: 18px;
+            position: relative;
+            border: 2px solid rgba(139, 92, 246, 0.3);
+        }
+
+        .music-cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .music-card:hover .music-cover img {
+            transform: scale(1.05);
+        }
+
+        .music-info {
+            flex-grow: 1;
+            margin-bottom: 15px;
+        }
+
+        .music-info h3 {
+            margin: 0 0 8px 0;
+            font-size: 18px;
+            color: var(--text);
+            font-weight: 700;
+        }
+
+        .music-info span {
+            font-size: 14px;
+            color: var(--muted);
+            display: block;
+            margin-bottom: 12px;
+        }
+
+        /* تغییر اصلی: رنگ شماره 1 (گرادینت اقیانوسی) */
+        audio::-webkit-media-controls-panel {
+            background: linear-gradient(to right, #00b4db, #0083b0) !important;
+        }
+
+        /* Pricing Plans */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 35px;
+            margin-top: 40px;
+        }
+
+        .plan-card {
+            background: rgba(23, 24, 33, 0.8);
+            border-radius: 20px;
+            padding: 35px;
+            text-align: center;
+            border: 2px solid rgba(45, 55, 72, 0.5);
+            transition: all 0.3s;
+            position: relative;
+            backdrop-filter: blur(10px);
+        }
+
+        .plan-card.featured {
+            border-color: var(--primary);
+            transform: scale(1.02);
+            box-shadow: 0 15px 35px rgba(139, 92, 246, 0.2);
+        }
+
+        .plan-card.featured::before {
+            content: 'پیشنهاد ویژه';
+            position: absolute;
+            top: -12px;
+            right: 50%;
+            transform: translateX(50%);
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: #000;
+            padding: 6px 20px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 700;
+            z-index: 1;
+        }
+
+        .plan-card h3 {
+            font-size: 26px;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+
+        .plan-price {
+            font-size: 38px;
+            font-weight: 900;
+            margin: 25px 0;
+            color: var(--text);
+        }
+
+        .plan-features {
+            list-style: none;
+            margin: 25px 0;
+        }
+
+        .plan-features li {
+            padding: 10px 0;
+            color: var(--muted);
+            border-bottom: 1px solid rgba(45, 55, 72, 0.5);
+        }
+
+        .plan-features li:last-child {
+            border-bottom: none;
+        }
+
+        .plan-button {
+            padding: 14px 28px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #00ff88, #00ccff);
+            font-weight: 700;
+            cursor: pointer;
+            color: #000;
+            width: 100%;
+            transition: all 0.3s;
+            font-size: 16px;
+        }
+
+        .plan-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(139, 92, 246, 0.3);
+        }
+
+        /* About Section */
+        .about-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            color: #00ffea;
+            font-size: 1.2rem;
+            line-height: 1.9;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 25px;
+            margin-top: 40px;
+        }
+
+        .feature-item {
+            background: rgba(23, 24, 33, 0.7);
+            padding: 25px;
+            border-radius: 16px;
+            text-align: center;
+            border: 1px solid rgba(45, 55, 72, 0.5);
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+        }
+
+        .feature-item:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: 0 10px 25px rgba(139, 92, 246, 0.2);
+        }
+
+        .feature-item div:first-child {
+            font-size: 36px;
+            margin-bottom: 15px;
+            display: block;
+            color: var(--primary);
+        }
+
+        /* Footer */
+        footer {
+            padding: 50px 20px;
+            text-align: center;
+            color: var(--muted);
+            border-top: 1px solid rgba(122, 0, 255, 0.3);
+            margin-top: 80px;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .footer-logo {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .footer-logo img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 2px solid var(--primary);
+        }
+
+        .footer-logo span {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .footer-links {
+            margin: 30px 0;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .footer-links a {
+            color: var(--muted);
+            transition: all 0.3s;
+            padding: 8px 16px;
+            border-radius: 8px;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+            background: rgba(139, 92, 246, 0.1);
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            nav {
+                display: none;
+                position: fixed;
+                top: 80px;
+                right: 0;
+                left: 0;
+                background: rgba(23, 24, 33, 0.95);
+                padding: 20px;
+                border-radius: 0 0 20px 20px;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+                z-index: 1000;
+                backdrop-filter: blur(10px);
+            }
+            
+            nav.active {
+                display: flex;
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+                background: none;
+                border: none;
+                color: var(--text);
+                font-size: 26px;
+                cursor: pointer;
+                padding: 5px;
+            }
+            
+            .section-title {
+                font-size: 1.8rem;
+            }
+            
+            .music-grid {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 20px;
+            }
+            
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .plan-card {
+                padding: 25px;
+            }
+            
+            footer {
+                padding: 40px 20px;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .mobile-menu-btn {
+                display: none;
+            }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(23, 24, 33, 0.5);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(var(--primary), var(--secondary));
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <!-- ذرات متحرک -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Header -->
+    <header>
+        <div class="logo">
+            <img src="https://uploadkon.ir/do.php?imgf=38de03_26InShot-20260201-011645313.png" alt="Music Line Logo" onerror="this.src='https://via.placeholder.com/50/8b5cf6/ffffff?text=ML'">
+            <span>Music Line</span>
+        </div>
+        
+        <nav id="mainNav">
+            <a href="#home">خانه</a>
+            <a href="#music">موزیک‌ها</a>
+            <a href="#pricing">پلن‌ها</a>
+            <a href="#about">درباره ما</a>
+            <a href="#contact">تماس</a>
+        </nav>
+        
+        <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="منو">☰</button>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <h1>پلتفرم اشتراک موزیک Music Line</h1>
+        <p>تجربه‌ای منحصر به فرد از گوش دادن به موسیقی - کیفیت بالا،  و دسترسی آسان</p>
+        <button id="subscribeBtn">funk Criminal</button>
+    </section>
+
+    <!-- Music Section -->
+    <section id="music">
+        <h2 class="section-title">موزیک funk Criminal از Icedmane & Dysmane سایت music line</h2>
+        <div class="music-grid">
+            <!-- Music Card 1 -->
+            <div class="music-card">
+                <div class="music-cover">
+                    <img src="https://uploadkon.ir/uploads/b40810_26InShot-20260210-213033818.jpg" alt="funk Criminal" loading="lazy">
+                </div>
+                <div class="music-info">
+                    <h3>funk Criminal (ورژن اصلی)</h3>
+                    <span>Icedmane & Dysmane</span>
+                    <audio controls>
+                        <source src="https://cdn.imgurl.ir/uploads/z4009_Funk_Criminal_-_Icedmane_Dysmane.mp3" type="audio/mpeg">
+                        مرورگر شما از پخش‌کننده صدا پشتیبانی نمی‌کند.
+                    </audio>
+                </div>
+            </div>
+            
+            <!-- Music Card 2 -->
+            <div class="music-card">
+                <div class="music-cover">
+                    <img src="https://uploadkon.ir/uploads/b40810_26InShot-20260210-213033818.jpg" alt="funk Criminal" loading="lazy">
+                </div>
+                <div class="music-info">
+                    <h3>funk Criminal (ورژن سریع)</h3>
+                    <span>Icedmane & Dysmane</span>
+                    <audio controls>
+                        <source src="https://cdn.imgurl.ir/uploads/z260852_Funk_Criminal_sped_Up_-_Icedmane_Dysmane.mp3" type="audio/mpeg">
+                        مرورگر شما از پخش‌کننده صدا پشتیبانی نمی‌کند.
+                    </audio>
+                </div>
+            </div>
+            
+            <!-- Music Card 3 -->
+            <div class="music-card">
+                <div class="music-cover">
+                    <img src="https://uploadkon.ir/uploads/b40810_26InShot-20260210-213033818.jpg" alt="" loading="lazy">
+                </div>
+                <div class="music-info">
+                    <h3>funk Criminal (ورژن آهسته)</h3>
+                    <span>Icedmane & Dysmane</span>
+                    <audio controls>
+                        <source src="https://cdn.imgurl.ir/uploads/s54964_Funk_Criminal_super_Slowed_-_Icedmane_Dysmane.mp3" type="audio/mpeg">
+                        مرورگر شما از پخش‌کننده صدا پشتیبانی نمی‌کند.
+                    </audio>
+                </div>
+            </div>
+            
+            <!-- Music Card 4 -->
+            
+
+    
+
+    <!-- About Section -->
+    <section id="about">
+        <h2 class="section-title">درباره Music Line</h2>
+        <div class="about-content">
+            <p>
+               
+                🎶 Music Line | دنیای بی‌مرز موسیقی
+                
+Music Line یک پلتفرم مدرن و حرفه‌ای برای اشتراک و پخش آنلاین موسیقی است که با هدف ارائه تجربه‌ای لذت‌بخش، سریع و باکیفیت برای علاقه‌مندان به موزیک طراحی شده است 🎧✨
+در Music Line شما می‌توانید به مجموعه‌ای متنوع از آهنگ‌ها در سبک‌های مختلف دسترسی داشته باشید، موسیقی‌های مورد علاقه‌تان را به‌راحتی پخش کنید و از کیفیت بالای صدا لذت ببرید 🔊💿
+طراحی ساده، زیبا و کاملاً ریسپانسیو این سایت باعث می‌شود بدون محدودیت، هم در موبایل 📱 و هم در دسکتاپ 💻 بهترین تجربه کاربری را داشته باشید. ما تلاش کرده‌ایم محیطی روان و جذاب فراهم کنیم تا تمرکز شما فقط روی لذت بردن از موسیقی باشد 🎼💙
+Music Line فقط یک سایت پخش موزیک نیست؛
+اینجا جایی‌ست که موسیقی، کیفیت و سادگی در کنار هم قرار گرفته‌اند 🚀🎶
+اگر به دنبال یک پلتفرم قابل اعتماد برای شنیدن و اشتراک‌گذاری موسیقی هستید، Music Line انتخاب شماست 🌟🎤 </p>
+            
+            
+
+    <!-- Contact Section -->
+    <section id="contact">
+        <h2 class="section-title">تماس با ما</h2>
+        <div class="about-content">
+            <p>برای پشتیبانی، پیشنهادات و همکاری با ما در تماس باشید:</p>
+            <p style="margin-top: 20px; font-size: 1.1rem;">
+                📧 ایمیل: djmzmusicplayer@gmail.com<br>
+                📱 تلفن: 09054586890<br>
+                🔎 آدرس سایت: musicline.ir
+            </p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-logo">
+            <img src="https://uploadkon.ir/do.php?imgf=38de03_26InShot-20260201-011645313.png" alt="Music Line Logo" onerror="this.src='https://via.placeholder.com/60/8b5cf6/ffffff?text=ML'">
+            <span>Music Line</span>
+        </div>
+        
+        <div class="footer-links">
+            <a href="#home">خانه</a>
+            <a href="#music">موزیک‌ها</a>
+            <a href="#pricing"></a>
+            <a href="#about">درباره ما</a>
+            <a href="#contact">تماس</a>
+            <a href="#" onclick="showTerms()">قوانین</a>
+            <a href="#" onclick="showPrivacy()">حریم خصوصی</a>
+        </div>
+        
+        <p>© ۲۰۲۶ Music Line – تمامی حقوق محفوظ است </p>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mainNav = document.getElementById('mainNav');
+        
+        if (mobileMenuBtn && mainNav) {
+            mobileMenuBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                mainNav.classList.toggle('active');
+                mobileMenuBtn.textContent = mainNav.classList.contains('active') ? '✕' : '☰';
+            });
+
+            // Close menu when clicking outside
+            document.addEventListener('click', () => {
+                if (mainNav.classList.contains('active')) {
+                    mainNav.classList.remove('active');
+                    mobileMenuBtn.textContent = '☰';
+                }
+            });
+
+            // Prevent menu from closing when clicking inside
+            mainNav.addEventListener('click', (e) => {
+                e.stopPropagation();
+            });
+        }
+
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                    
+                    // Close mobile menu if open
+                    if (mainNav && mainNav.classList.contains('active')) {
+                        mainNav.classList.remove('active');
+                        mobileMenuBtn.textContent = '☰';
+                    }
+                }
+            });
+        });
+
+        // Create particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            if (!particlesContainer) return;
+            
+            const particleCount = 50;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                // Random position
+                particle.style.left = Math.random() * 100 + 'vw';
+                particle.style.top = Math.random() * 100 + 'vh';
+                
+                // Random size
+                const size = Math.random() * 3 + 1;
+                particle.style.width = size + 'px';
+                particle.style.height = size + 'px';
+                
+                // Random animation delay
+                particle.style.animationDelay = Math.random() * 20 + 's';
+                
+                // Random animation duration
+                particle.style.animationDuration = Math.random() * 15 + 15 + 's';
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Handle image errors
+        document.querySelectorAll('img').forEach(img => {
+            img.addEventListener('error', function() {
+                this.src = 'https://via.placeholder.com/300/171821/8b5cf6?text=Music+Cover';
+                this.alt = 'تصویر جایگزین';
+            });
+        });
+
+        // Audio player enhancement
+        document.querySelectorAll('audio').forEach(audio => {
+            audio.addEventListener('play', function() {
+                const card = this.closest('.music-card');
+                if (card) {
+                    card.style.borderColor = '#8b5cf6';
+                    card.style.boxShadow = '0 0 20px rgba(139, 92, 246, 0.3)';
+                }
+            });
+            
+            audio.addEventListener('pause', function() {
+                const card = this.closest('.music-card');
+                if (card) {
+                    card.style.borderColor = '';
+                    card.style.boxShadow = '';
+                }
+            });
+        });
+
+        // Terms and Privacy functions
+        function showTerms() {
+            alert('قوانین استفاده از سرویس:\n\n1. استفاده از محتوا تنها برای اهداف شخصی مجاز است\n2. هرگونه کپی‌برداری غیرمجاز پیگرد قانونی دارد\n3. کاربر مسئول حفظ اطلاعات حساب خود است\n4. شرکت حق تغییر قوانین را در هر زمان محفوظ می‌دارد');
+            return false;
+        }
+
+        function showPrivacy() {
+            alert('حریم خصوصی:\n\n1. اطلاعات شما نزد ما محفوظ است\n2. هیچ اطلاعاتی به اشخاص ثالث فروخته نمی‌شود\n3. از کوکی‌ها برای بهبود تجربه کاربری استفاده می‌کنیم\n4. می‌توانید در هر زمان حساب خود را حذف کنید');
+            return false;
+        }
+
+        // Initialize particles when page loads
+        document.addEventListener('DOMContentLoaded', createParticles);
+    </script>
+</body>
+</html>
